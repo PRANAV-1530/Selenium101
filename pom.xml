@@ -32,9 +32,19 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>4.38.0</version>
+			<version>4.46.0</version>
+			<scope>compile</scope>
 		</dependency>
-
+		<!-- CDP implementation matching the Chrome major version under test.
+		     Without a matching selenium-devtools-vNN on the classpath, Selenium
+		     falls back to a no-op CDP and DevTools features (e.g. the basic-auth
+		     handler in BasicAuthentication) fail at runtime with
+		     "You are using a no-op implementation of the CDP". -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-devtools-v150</artifactId>
+			<version>4.46.0</version>
+		</dependency>
 	</dependencies>
 
 </project>

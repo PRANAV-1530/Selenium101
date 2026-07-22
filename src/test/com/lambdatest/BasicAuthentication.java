@@ -51,13 +51,13 @@ public class BasicAuthentication {
                         .addAuthHandler(whenThisMatches, useTheseCredentials))
                 .augment(driver);
 
-        ((HasAuthentication) driver).register(UsernameAndPassword.of("foo", "bar"));
+        ((HasAuthentication) driver).register(UsernameAndPassword.of("admin", "admin"));
 
-        driver.get("http://httpbin.org/basic-auth/foo/bar");
+        driver.get("https://the-internet.herokuapp.com/basic_auth");
 
         String text = driver.findElement(By.tagName("body")).getText();
         System.out.println(text);
-        if (text.contains("authenticated")) {
+        if (text.contains("Congratulations")) {
             markStatus("passed", "Authentication Successful", driver);
         } else {
             markStatus("failed", "Authentication Failure", driver);
