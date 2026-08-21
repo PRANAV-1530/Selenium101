@@ -6,37 +6,58 @@ import java.net.URL;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.safari.SafariOptions;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
 
 public class DragAndDropSlidersClass {
 
 	private RemoteWebDriver driver;
 	private String Status = "passed";
 
-	public void setup() throws MalformedURLException {
+	@Parameters({"browser", "version", "platform"})
+	@BeforeMethod
+	public void setup(String browser, String version, String platform) throws MalformedURLException {
 		String username = System.getenv("LT_USERNAME") == null ? "nvnkumaredu" : System.getenv("LT_USERNAME");
 		String authkey = System.getenv("LT_ACCESS_KEY") == null ? "LT_jrkzmo4xRiez217wTnyMpvuD7tHsIU5HH3lwjZLOpbhNKJU" : System.getenv("LT_ACCESS_KEY");
 		String hub = "@hub.lambdatest.com/wd/hub";
 
-		DesiredCapabilities caps = new DesiredCapabilities();
-		caps.setCapability("browserName", "Chrome");
+		MutableCapabilities capabilities;
+		if (browser.equalsIgnoreCase("Chrome")) {
+			capabilities = new ChromeOptions();
+		} else if (browser.equalsIgnoreCase("Safari")) {
+			capabilities = new SafariOptions();
+		} else {
+			capabilities = new DesiredCapabilities();
+			capabilities.setCapability("browserName", browser);
+		}
+		
+		capabilities.setCapability("platformName", platform);
+		capabilities.setCapability("browserVersion", version);
 		
 		java.util.HashMap<String, Object> ltOptions = new java.util.HashMap<String, Object>();
-		ltOptions.put("platformName", "Windows 10");
-		ltOptions.put("browserVersion", "103.0");
-		ltOptions.put("resolution", "1024x768");
+		ltOptions.put("username", username);
+		ltOptions.put("accessKey", authkey);
+		ltOptions.put("project", "Untitled");
+		ltOptions.put("selenium_version", "4.0.0");
+		ltOptions.put("w3c", true);
 		ltOptions.put("build", "TestNG With Java");
 		ltOptions.put("name", "TestScenario2" + this.getClass().getName());
 		ltOptions.put("plugin", "git-testng");
 		ltOptions.put("tags", new String[] { "Feature", "Magicleap", "Severe" });
 		
-		caps.setCapability("LT:Options", ltOptions);
+		capabilities.setCapability("LT:Options", ltOptions);
 
-		driver = new RemoteWebDriver(new URL("https://" + username + ":" + authkey + hub), caps);
+		driver = new RemoteWebDriver(new URL("https://" + username + ":" + authkey + hub), capabilities);
 	}
 
+	@Test
 	public void TestScenario2() throws InterruptedException {
 
 		driver.get("https://www.lambdatest.com/selenium-playground/");
@@ -67,16 +88,11 @@ public class DragAndDropSlidersClass {
 
 	}
 
+	@AfterMethod
 	public void tearDown() {
 		driver.executeScript("lambda-status=" + Status);
 		driver.quit();
 	}
 
-	public static void main(String[] args) throws Exception {
-		DragAndDropSlidersClass test = new DragAndDropSlidersClass();
-		test.setup();
-		test.TestScenario2();
-		test.tearDown();
-	}
 }
 
