@@ -4,15 +4,15 @@
 	<artifactId>java-selenium-sample</artifactId>
 	<version>0.0.1</version>
 	<build>
-		<sourceDirectory>src/test</sourceDirectory>
-		<resources>
-			<resource>
+		<testSourceDirectory>src/test</testSourceDirectory>
+		<testResources>
+			<testResource>
 				<directory>src/test</directory>
 				<excludes>
 					<exclude>**/*.java</exclude>
 				</excludes>
-			</resource>
-		</resources>
+			</testResource>
+		</testResources>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -44,6 +44,11 @@
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-devtools-v150</artifactId>
 			<version>4.46.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>7.6.0</version>
 		</dependency>
 	</dependencies>
 
